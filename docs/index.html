@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>codex-review - Claude Code Plugin</title>
+  <meta name="description" content="A Claude Code plugin that lets Claude and OpenAI Codex iteratively review your plans and code until approved.">
+  <meta property="og:title" content="codex-review - Claude Code Plugin">
+  <meta property="og:description" content="Let Claude and Codex review each other's work. Iterative, multi-round plan and code review.">
+  <meta property="og:image" content="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png">
+  <meta property="og:url" content="https://lud1161.github.io/codex-review-skill/">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #7c3aed;
+      --accent-light: #a78bfa;
+      --green: #3fb950;
+      --orange: #d29922;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 0 48px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      color: var(--accent-light);
+    }
+
+    .hero .tagline {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .badges img { height: 22px; }
+
+    .hero-image {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    /* CTA */
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .install-hint {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 48px;
+    }
+
+    .install-hint code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Sections */
+    section {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .skill-card code {
+      display: inline-block;
+      background: var(--bg);
+      color: var(--accent-light);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .skill-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Steps */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .step-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Config table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Prerequisites */
+    .prereq-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .prereq-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+    }
+
+    .prereq-list li .check {
+      color: var(--green);
+      font-size: 1.1rem;
+    }
+
+    .prereq-list a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    .prereq-list a:hover { text-decoration: underline; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <h1><span>codex-review</span></h1>
+      <p class="tagline">Let Claude and Codex review each other's work.</p>
+
+      <div class="badges">
+        <a href="https://github.com/LuD1161/codex-review-skill/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License"></a>
+        <a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude_Code-Plugin-blueviolet" alt="Claude Code Plugin"></a>
+        <a href="https://github.com/openai/codex"><img src="https://img.shields.io/badge/OpenAI-Codex_CLI-412991" alt="OpenAI Codex CLI"></a>
+      </div>
+
+      <img class="hero-image" src="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png" alt="The iterative review loop: Claude writes, Codex reviews, repeat until approved" />
+
+      <div class="cta-group">
+        <a class="btn btn-primary" href="https://github.com/LuD1161/codex-review-skill">View on GitHub</a>
+        <a class="btn btn-secondary" href="https://aseemshrey.in/blog/claude-codex-iterative-plan-review/">Read the Blog Post</a>
+      </div>
+      <p class="install-hint">Install locally: <code>claude --plugin-dir /path/to/codex-review-skill</code></p>
+    </div>
+
+    <!-- Skills -->
+    <section>
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <code>/codex-review:plan</code>
+          <p>Review an implementation plan. Claude revises based on Codex feedback until approved.</p>
+        </div>
+        <div class="skill-card">
+          <code>/codex-review:code</code>
+          <p>Review code changes from the current session. Claude fixes issues until approved.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section>
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>You trigger a review</h3>
+            <p>Run <code>/codex-review:plan</code> or <code>/codex-review:code</code> in Claude Code.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Claude gathers context</h3>
+            <p>Claude collects your plan or git diff and sends it to Codex CLI for review.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Codex reviews</h3>
+            <p>Codex checks for bugs, security issues, performance problems, and correctness.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Claude fixes &amp; re-submits</h3>
+            <p>Claude addresses Codex's feedback and sends the revised version back. Up to 5 rounds.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Approved!</h3>
+            <p>Once Codex is satisfied, you get the green light to ship.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prerequisites -->
+    <section>
+      <h2>Prerequisites</h2>
+      <ul class="prereq-list">
+        <li><span class="check">&#10003;</span> <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> &mdash; installed and authenticated</li>
+        <li><span class="check">&#10003;</span> <a href="https://github.com/openai/codex">OpenAI Codex CLI</a> &mdash; <code>npm install -g @openai/codex</code></li>
+        <li><span class="check">&#10003;</span> OpenAI API key &mdash; configured for Codex</li>
+      </ul>
+    </section>
+
+    <!-- Configuration -->
+    <section>
+      <h2>Configuration</h2>
+      <table>
+        <thead>
+          <tr><th>Option</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Model</td><td><code>gpt-5.3-codex</code></td><td>Override per-invocation via arguments</td></tr>
+          <tr><td>Max rounds</td><td><code>5</code></td><td>Prevents infinite review loops</td></tr>
+          <tr><td>Sandbox</td><td><code>read-only</code></td><td>Codex can read your codebase but never writes</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      Built by <a href="https://aseemshrey.in">Aseem Shrey</a> &middot;
+      <a href="https://github.com/LuD1161/codex-review-skill">GitHub</a> &middot;
+      <a href="https://aseemshrey.in/blog/claude-codex-iterative-plan-review/">Blog</a> &middot;
+      MIT License
+    </div>
+  </footer>
+
+</body>
+</html>
