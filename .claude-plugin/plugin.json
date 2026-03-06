@@ -1,0 +1,12 @@
+{
+  "name": "codex-review",
+  "description": "Send your implementation plan to OpenAI Codex CLI for iterative review. Claude and Codex go back-and-forth until Codex approves the plan.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Aseem Shrey"
+  },
+  "homepage": "https://github.com/AseemShrey/codex-review-skill",
+  "repository": "https://github.com/AseemShrey/codex-review-skill",
+  "license": "MIT",
+  "keywords": ["codex", "review", "plan", "openai", "code-review"]
+}
