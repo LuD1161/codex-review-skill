@@ -2,10 +2,6 @@
 
 # codex-review
 
-<img src="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png" alt="Codex Review Loop" width="600" />
-
-<br />
-
 **Let Claude and Codex review each other's work.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -30,35 +26,9 @@ A Claude Code plugin that sends your plans and code to OpenAI Codex CLI for **it
 
 ## How It Works
 
-```
-                    ┌─────────────────────────────────────┐
-                    │          You trigger review          │
-                    └──────────────┬──────────────────────┘
-                                   │
-                                   v
-                    ┌─────────────────────────────────────┐
-                    │  Claude gathers plan / code diff     │
-                    └──────────────┬──────────────────────┘
-                                   │
-                                   v
-                ┌──────────────────────────────────────────┐
-           ┌───>│  Codex reviews for bugs, security,       │
-           │    │  performance, correctness                 │
-           │    └──────────────┬───────────────────────────┘
-           │                   │
-           │                   v
-           │    ┌──────────────────────────────────────────┐
-           │    │  VERDICT: APPROVED?                       │
-           │    └──────┬───────────────────┬───────────────┘
-           │           │                   │
-           │        No │               Yes │
-           │           v                   v
-           │    ┌──────────────┐   ┌──────────────────────┐
-           └────│ Claude fixes │   │  Done! Ready to ship  │
-                │ the issues   │   └──────────────────────┘
-                └──────────────┘
-                 (max 5 rounds)
-```
+<p align="center">
+<img src="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png" alt="Codex Review Loop" width="600" />
+</p>
 
 ## Prerequisites
 
