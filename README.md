@@ -1,18 +1,17 @@
 <div align="center">
 
-```
-   ___          _                ____            _
-  / __\___   __| | _____  __   / __ \ _____   _(_) _____      __
- / /  / _ \ / _` |/ _ \ \/ /  / /_)// _ \ \ / / |/ _ \ \ /\ / /
-/ /__| (_) | (_| |  __/>  <  / __ \  __/\ V /| |  __/\ V  V /
-\____/\___/ \__,_|\___/_/\_\ \/  \/\___| \_/ |_|\___| \_/\_/
-```
+# codex-review
+
+<img src="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png" alt="Codex Review Loop" width="600" />
+
+<br />
 
 **Let Claude and Codex review each other's work.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://code.claude.com/docs/en/plugins)
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI-Codex_CLI-412991)](https://github.com/openai/codex)
+[![Blog Post](https://img.shields.io/badge/Blog-Read_the_story-orange)](https://aseemshrey.in/blog/claude-codex-iterative-plan-review/)
 
 ---
 
