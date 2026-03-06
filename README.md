@@ -1,38 +1,81 @@
-# codex-review
+<div align="center">
 
-A Claude Code plugin that sends your plans and code to OpenAI Codex CLI for iterative review. Claude and Codex go back-and-forth until Codex approves.
+```
+   ___          _                ____            _
+  / __\___   __| | _____  __   / __ \ _____   _(_) _____      __
+ / /  / _ \ / _` |/ _ \ \/ /  / /_)// _ \ \ / / |/ _ \ \ /\ / /
+/ /__| (_) | (_| |  __/>  <  / __ \  __/\ V /| |  __/\ V  V /
+\____/\___/ \__,_|\___/_/\_\ \/  \/\___| \_/ |_|\___| \_/\_/
+```
+
+**Let Claude and Codex review each other's work.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://code.claude.com/docs/en/plugins)
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI-Codex_CLI-412991)](https://github.com/openai/codex)
+
+---
+
+A Claude Code plugin that sends your plans and code to OpenAI Codex CLI for **iterative, multi-round review**. Claude and Codex go back-and-forth — fixing, refining, and improving — until Codex approves.
+
+[Installation](#installation) · [Usage](#usage) · [How It Works](#how-it-works) · [Configuration](#configuration)
+
+</div>
 
 ## Skills
 
-| Skill | Description |
-|---|---|
-| `/codex-review:plan` | Review an implementation plan. Claude revises the plan based on Codex feedback until approved. |
-| `/codex-review:code` | Review code changes from the current session. Claude fixes issues Codex finds until approved. |
+| Skill | What it does |
+|:--|:--|
+| `/codex-review:plan` | Review an implementation plan. Claude revises based on Codex feedback until approved. |
+| `/codex-review:code` | Review code changes from the current session. Claude fixes issues until approved. |
 
 ## How It Works
 
-1. Claude sends your plan or code diff to Codex for review
-2. Codex reviews for bugs, security, performance, correctness, and more
-3. Claude automatically revises the plan or fixes the code based on feedback
-4. The loop continues (up to 5 rounds) until Codex approves
+```
+                    ┌─────────────────────────────────────┐
+                    │          You trigger review          │
+                    └──────────────┬──────────────────────┘
+                                   │
+                                   v
+                    ┌─────────────────────────────────────┐
+                    │  Claude gathers plan / code diff     │
+                    └──────────────┬──────────────────────┘
+                                   │
+                                   v
+                ┌──────────────────────────────────────────┐
+           ┌───>│  Codex reviews for bugs, security,       │
+           │    │  performance, correctness                 │
+           │    └──────────────┬───────────────────────────┘
+           │                   │
+           │                   v
+           │    ┌──────────────────────────────────────────┐
+           │    │  VERDICT: APPROVED?                       │
+           │    └──────┬───────────────────┬───────────────┘
+           │           │                   │
+           │        No │               Yes │
+           │           v                   v
+           │    ┌──────────────┐   ┌──────────────────────┐
+           └────│ Claude fixes │   │  Done! Ready to ship  │
+                │ the issues   │   └──────────────────────┘
+                └──────────────┘
+                 (max 5 rounds)
+```
 
 ## Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-- [OpenAI Codex CLI](https://github.com/openai/codex) installed (`npm install -g @openai/codex`)
-- An OpenAI API key configured for Codex
+- [**Claude Code**](https://docs.anthropic.com/en/docs/claude-code) — installed and authenticated
+- [**OpenAI Codex CLI**](https://github.com/openai/codex) — `npm install -g @openai/codex`
+- **OpenAI API key** — configured for Codex
 
 ## Installation
 
-### From a marketplace
-
-If this plugin is listed in a marketplace you've added:
+**From a marketplace**
 
 ```bash
 /plugin install codex-review@<marketplace-name>
 ```
 
-### Local development
+**Local / development**
 
 ```bash
 claude --plugin-dir /path/to/codex-review-skill
@@ -46,7 +89,7 @@ claude --plugin-dir /path/to/codex-review-skill
 /codex-review:plan
 ```
 
-Creates or discusses a plan, then sends it to Codex for iterative review.
+Send your implementation plan to Codex. Claude automatically revises the plan based on feedback until Codex approves.
 
 ### Review code changes
 
@@ -54,11 +97,11 @@ Creates or discusses a plan, then sends it to Codex for iterative review.
 /codex-review:code
 ```
 
-Gathers the git diff from your current session and sends it to Codex for review. Claude automatically fixes issues Codex finds.
+Gather the git diff from your session and send it to Codex. Claude automatically fixes issues Codex finds.
 
-### Specify a different model
+### Override the model
 
-Both skills accept a model override as an argument:
+Both skills accept a model argument:
 
 ```
 /codex-review:plan o4-mini
@@ -67,10 +110,37 @@ Both skills accept a model override as an argument:
 
 ## Configuration
 
-- **Default model:** `gpt-5.3-codex` (override via arguments)
-- **Max rounds:** 5
-- **Codex sandbox:** read-only (Codex can read your codebase for context but cannot modify files)
+| Option | Default | Description |
+|:--|:--|:--|
+| Model | `gpt-5.3-codex` | Override per-invocation via arguments |
+| Max rounds | `5` | Prevents infinite review loops |
+| Sandbox | `read-only` | Codex can read your codebase but never writes |
+
+## Project Structure
+
+```
+codex-review-skill/
+├── .claude-plugin/
+│   └── plugin.json          # Plugin manifest
+├── skills/
+│   ├── plan/
+│   │   └── SKILL.md         # Plan review skill
+│   └── code/
+│       └── SKILL.md         # Code review skill
+├── LICENSE
+└── README.md
+```
+
+## Contributing
+
+PRs welcome! If you have ideas for new review skills or improvements to the review prompts, open an issue or submit a pull request.
 
 ## License
 
-MIT
+[MIT](LICENSE)
+
+---
+
+<div align="center">
+<sub>Built with Claude Code + OpenAI Codex — because two heads are better than one.</sub>
+</div>
