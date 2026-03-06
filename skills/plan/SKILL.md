@@ -10,7 +10,7 @@ Send the current implementation plan to OpenAI Codex for review. Claude revises 
 
 ## When to Invoke
 
-- When the user runs `/codex-review:codex-review` during or after plan mode
+- When the user runs `/codex-review:plan` during or after plan mode
 - When the user wants a second opinion on a plan from a different model
 
 ## Agent Instructions
@@ -59,7 +59,7 @@ If changes are needed, end with exactly: VERDICT: REVISE"
 
 **Notes:**
 
-- Use `-m gpt-5.3-codex` as the default model (configured in `~/.codex/config.toml`). If the user specifies a different model (e.g., `/codex-review:codex-review o4-mini`), use that instead.
+- Use `-m gpt-5.3-codex` as the default model (configured in `~/.codex/config.toml`). If the user specifies a different model (e.g., `/codex-review:plan o4-mini`), use that instead.
 - Use `-s read-only` so Codex can read the codebase for context but cannot modify anything.
 - Use `-o` to capture the output to a file for reliable reading.
 
@@ -165,7 +165,7 @@ Max 5 rounds. Each round preserves Codex's conversation context via session resu
 ## Rules
 
 - Claude **actively revises the plan** based on Codex feedback between rounds -- this is NOT just passing messages, Claude should make real improvements
-- Default model is `gpt-5.3-codex`. Accept model override from the user's arguments (e.g., `/codex-review:codex-review o4-mini`)
+- Default model is `gpt-5.3-codex`. Accept model override from the user's arguments (e.g., `/codex-review:plan o4-mini`)
 - Always use read-only sandbox mode -- Codex should never write files
 - Max 5 review rounds to prevent infinite loops
 - Show the user each round's feedback and revisions so they can follow along

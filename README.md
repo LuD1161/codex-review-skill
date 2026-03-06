@@ -1,14 +1,20 @@
 # codex-review
 
-A Claude Code plugin that sends your implementation plan to OpenAI Codex CLI for iterative review. Claude and Codex go back-and-forth refining the plan until Codex approves it.
+A Claude Code plugin that sends your plans and code to OpenAI Codex CLI for iterative review. Claude and Codex go back-and-forth until Codex approves.
+
+## Skills
+
+| Skill | Description |
+|---|---|
+| `/codex-review:plan` | Review an implementation plan. Claude revises the plan based on Codex feedback until approved. |
+| `/codex-review:code` | Review code changes from the current session. Claude fixes issues Codex finds until approved. |
 
 ## How It Works
 
-1. You create a plan in Claude Code (via plan mode or discussion)
-2. Run `/codex-review:codex-review` to send it to Codex for review
-3. Codex reviews for correctness, risks, missing steps, alternatives, and security
-4. Claude automatically revises the plan based on Codex's feedback
-5. The loop continues (up to 5 rounds) until Codex approves
+1. Claude sends your plan or code diff to Codex for review
+2. Codex reviews for bugs, security, performance, correctness, and more
+3. Claude automatically revises the plan or fixes the code based on feedback
+4. The loop continues (up to 5 rounds) until Codex approves
 
 ## Prerequisites
 
@@ -34,20 +40,30 @@ claude --plugin-dir /path/to/codex-review-skill
 
 ## Usage
 
-1. Start Claude Code and create or discuss an implementation plan
-2. Run the skill:
+### Review a plan
 
 ```
-/codex-review:codex-review
+/codex-review:plan
 ```
 
-3. Optionally specify a different model:
+Creates or discusses a plan, then sends it to Codex for iterative review.
+
+### Review code changes
 
 ```
-/codex-review:codex-review o4-mini
+/codex-review:code
 ```
 
-4. Watch as Claude and Codex iterate on your plan until it's approved
+Gathers the git diff from your current session and sends it to Codex for review. Claude automatically fixes issues Codex finds.
+
+### Specify a different model
+
+Both skills accept a model override as an argument:
+
+```
+/codex-review:plan o4-mini
+/codex-review:code o4-mini
+```
 
 ## Configuration
 
