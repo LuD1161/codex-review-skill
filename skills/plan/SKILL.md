@@ -62,6 +62,8 @@ If changes are needed, end with exactly: VERDICT: REVISE"
 - Use `-m gpt-5.3-codex` as the default model (configured in `~/.codex/config.toml`). If the user specifies a different model (e.g., `/codex-review:plan o4-mini`), use that instead.
 - Use `-s read-only` so Codex can read the codebase for context but cannot modify anything.
 - Use `-o` to capture the output to a file for reliable reading.
+- Do NOT pipe the command through `tail` or any other filter — let the full output be visible so the user can see Codex's progress.
+- Set a timeout of at least 5 minutes (300000ms) for the Bash tool call, as Codex reviews can take a while.
 
 ### Step 4: Read Review & Check Verdict
 
@@ -106,10 +108,10 @@ Here's what I changed:
 [List the specific changes made]
 
 Please re-review. If the plan is now solid and ready to implement, end with: VERDICT: APPROVED
-If more changes are needed, end with: VERDICT: REVISE" 2>&1 | tail -80
+If more changes are needed, end with: VERDICT: REVISE"
 ```
 
-**Note:** `codex exec resume` does NOT support `-o` flag. Capture output from stdout instead (pipe through `tail` to skip startup lines). Read the Codex response directly from the command output.
+**Note:** `codex exec resume` does NOT support `-o` flag. Read the Codex response directly from stdout. Do NOT pipe through `tail` or any filter — show full output. Set a timeout of at least 5 minutes (300000ms).
 
 Then go back to **Step 4** (Read Review & Check Verdict).
 
