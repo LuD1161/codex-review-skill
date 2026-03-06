@@ -89,7 +89,7 @@ If changes are needed, end with: VERDICT: REVISE"
 - Use `-s read-only` so Codex can read the codebase for context but cannot modify anything.
 - Use `-o` to capture the output to a file for reliable reading.
 - Do NOT pipe the command through `tail` or any other filter — let the full output be visible so the user can see Codex's progress.
-- Set a timeout of at least 5 minutes (300000ms) for the Bash tool call, as Codex reviews can take a while.
+- Set a timeout of at least 10 minutes (600000ms) for the Bash tool call, as Codex reviews can take a while.
 
 ### Step 5: Read Review & Check Verdict
 
@@ -142,7 +142,7 @@ Please re-review. If the code is now solid and ready to ship, end with: VERDICT:
 If more changes are needed, end with: VERDICT: REVISE"
 ```
 
-**Note:** `codex exec resume` does NOT support `-o` flag. Read the Codex response directly from stdout. Do NOT pipe through `tail` or any filter — show full output. Set a timeout of at least 5 minutes (300000ms).
+**Note:** `codex exec resume` does NOT support `-o` flag. Read the Codex response directly from stdout. Do NOT pipe through `tail` or any filter — show full output. Set a timeout of at least 10 minutes (600000ms).
 
 Then go back to **Step 5** (Read Review & Check Verdict).
 
