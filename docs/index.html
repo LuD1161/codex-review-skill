@@ -112,17 +112,72 @@
       border: 1px solid var(--border);
     }
 
-    .install-hint {
-      color: var(--text-muted);
-      font-size: 0.85rem;
+    .install-box {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 24px 32px;
       margin-bottom: 48px;
+      display: inline-block;
     }
 
-    .install-hint code {
-      background: var(--surface);
-      padding: 2px 6px;
-      border-radius: 4px;
+    .install-box .install-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-light);
+      margin-bottom: 12px;
+    }
+
+    .install-commands {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .install-cmd {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
       font-size: 0.85rem;
+      color: var(--green);
+      cursor: pointer;
+      transition: border-color 0.15s;
+      position: relative;
+    }
+
+    .install-cmd:hover {
+      border-color: var(--accent-light);
+    }
+
+    .install-cmd .copied {
+      display: none;
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: var(--bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .install-cmd.show-copied .copied {
+      display: block;
+    }
+
+    .install-ampersand {
+      color: var(--text-muted);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
     }
 
     /* Sections */
@@ -299,11 +354,25 @@
 
       <img class="hero-image" src="https://aseemshrey.in/static/a82ed27bb0a18671cbf0f78bb4a0826b/3ed24/codex-review-loop.png" alt="The iterative review loop: Claude writes, Codex reviews, repeat until approved" />
 
+      <div class="install-box">
+        <div class="install-label">Quick Install:</div>
+        <div class="install-commands">
+          <div class="install-cmd" onclick="copyCmd(this, '/plugin marketplace add LuD1161/codex-review-skill')">
+            <span class="copied">Copied!</span>
+            /plugin marketplace add LuD1161/codex-review-skill
+          </div>
+          <span class="install-ampersand">&amp;&amp;</span>
+          <div class="install-cmd" onclick="copyCmd(this, '/plugin install codex-review@codex-review-marketplace')">
+            <span class="copied">Copied!</span>
+            /plugin install codex-review@codex-review-marketplace
+          </div>
+        </div>
+      </div>
+
       <div class="cta-group">
         <a class="btn btn-primary" href="https://github.com/LuD1161/codex-review-skill">View on GitHub</a>
         <a class="btn btn-secondary" href="https://aseemshrey.in/blog/claude-codex-iterative-plan-review/">Read the Blog Post</a>
       </div>
-      <p class="install-hint">Install: <code>git clone https://github.com/LuD1161/codex-review-skill.git &amp;&amp; claude --plugin-dir ./codex-review-skill</code></p>
     </div>
 
     <!-- Skills -->
@@ -398,6 +467,14 @@
       MIT License
     </div>
   </footer>
+
+  <script>
+    function copyCmd(el, text) {
+      navigator.clipboard.writeText(text);
+      el.classList.add('show-copied');
+      setTimeout(() => el.classList.remove('show-copied'), 1500);
+    }
+  </script>
 
 </body>
 </html>

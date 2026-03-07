@@ -1,0 +1,21 @@
+{
+  "name": "codex-review-marketplace",
+  "owner": {
+    "name": "Aseem Shrey",
+    "email": "aseemshrey@gmail.com"
+  },
+  "metadata": {
+    "description": "Marketplace for the codex-review plugin"
+  },
+  "plugins": [
+    {
+      "name": "codex-review",
+      "source": "./",
+      "description": "Send your plans and code to OpenAI Codex CLI for iterative, multi-round review.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Aseem Shrey"
+      }
+    }
+  ]
+}

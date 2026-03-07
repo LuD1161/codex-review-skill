@@ -38,10 +38,11 @@ A Claude Code plugin that sends your plans and code to OpenAI Codex CLI for **it
 
 ## Installation
 
-**From a marketplace**
+**Quick install** (run inside Claude Code):
 
-```bash
-/plugin install codex-review@<marketplace-name>
+```
+/plugin marketplace add LuD1161/codex-review-skill
+/plugin install codex-review@codex-review-marketplace
 ```
 
 **Local / development**
