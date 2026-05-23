@@ -61,7 +61,6 @@ Run Codex CLI in non-interactive mode:
 
 ```bash
 codex exec \
-  -m gpt-5.3-codex \
   -s read-only \
   -o /tmp/codex-code-review-${REVIEW_ID}.md \
   "Review the code changes described in /tmp/claude-code-${REVIEW_ID}.md. Focus on:
@@ -85,7 +84,7 @@ If changes are needed, end with: VERDICT: REVISE"
 
 **Notes:**
 
-- Use `-m gpt-5.3-codex` as the default model. If the user specifies a different model (e.g., `/codex-review:code o4-mini`), use that instead.
+- Omit `-m` by default so Codex uses its own configured default model. If the user specifies a model (e.g., `/codex-review:code o4-mini`), add `-m <model>` to the command.
 - Use `-s read-only` so Codex can read the codebase for context but cannot modify anything.
 - Use `-o` to capture the output to a file for reliable reading.
 - Do NOT pipe the command through `tail` or any other filter — let the full output be visible so the user can see Codex's progress.
@@ -97,7 +96,7 @@ If changes are needed, end with: VERDICT: REVISE"
 2. Present Codex's review to the user:
 
 ```
-## Codex Code Review -- Round N (model: gpt-5.3-codex)
+## Codex Code Review -- Round N
 
 [Codex's feedback here, organized by severity]
 ```
@@ -153,7 +152,7 @@ Then go back to **Step 5** (Read Review & Check Verdict).
 Once approved (or max rounds reached):
 
 ```
-## Codex Code Review -- Final (model: gpt-5.3-codex)
+## Codex Code Review -- Final
 
 **Status:** Approved after N round(s)
 
@@ -171,7 +170,7 @@ Once approved (or max rounds reached):
 If max rounds were reached without approval:
 
 ```
-## Codex Code Review -- Final (model: gpt-5.3-codex)
+## Codex Code Review -- Final
 
 **Status:** Max rounds (5) reached -- not fully approved
 
@@ -191,7 +190,7 @@ rm -f /tmp/claude-code-${REVIEW_ID}.md /tmp/codex-code-review-${REVIEW_ID}.md
 ## Rules
 
 - Claude **actively fixes the code** based on Codex feedback between rounds -- not just relaying messages
-- Default model is `gpt-5.3-codex`. Accept model override from user arguments (e.g., `/codex-review:code o4-mini`)
+- Use Codex's configured default model (omit `-m`). Accept model override from user arguments (e.g., `/codex-review:code o4-mini`) and pass it via `-m <model>`
 - Always use read-only sandbox mode for Codex -- Codex reviews but never writes files
 - Max 5 review rounds to prevent infinite loops
 - Show the user each round's feedback and fixes so they can follow along
